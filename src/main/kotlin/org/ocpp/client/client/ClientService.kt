@@ -15,7 +15,6 @@ import org.ocpp.client.event.client.request.*
 import org.ocpp.client.utils.Ids
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.util.concurrent.CountDownLatch
@@ -26,11 +25,9 @@ class ClientService @Autowired constructor(
     private val clientConfiguration: IClientConfiguration
 ) : IClientService {
 
-    @Value("\${ocpp.port.server}")
-    val port: Int = 0
-
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val port = 8887
     private var client: JSONClient? = null
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun init(ipAddress: String) {
         logger.info("Starting client on port '$port'")

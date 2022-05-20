@@ -16,7 +16,6 @@ import org.ocpp.client.server.interfaces.IServerService
 import org.ocpp.client.utils.Ids
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.util.*
@@ -27,14 +26,10 @@ class ServerService @Autowired constructor(
     private val applicationEventPublisher: ApplicationEventPublisher
 ) : IServerService {
 
-    @Value("\${ocpp.port.server}")
-    val port: Int = 0
-
-    @Value("\${ocpp.heartbeat.interval}")
-    val heartbeatInterval: Int = 0
-
-    private val logger = LoggerFactory.getLogger(this::class.java)
+    private val port = 8887
+    private val heartbeatInterval = 5
     private var server: JSONServer? = null
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun init(ipAddress: String) {
         logger.info("Starting server on IP address '$ipAddress' and port '$port'")
