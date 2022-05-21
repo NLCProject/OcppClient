@@ -28,6 +28,8 @@ class ClientInitTest {
     @SpyBean
     private lateinit var testEventListener: EventTestListener
 
+    private val ipAddress = "127.0.0.1"
+
     @AfterEach
     fun close() {
         serverInitService.close()
@@ -36,7 +38,6 @@ class ClientInitTest {
 
     @Test
     fun init() {
-        val ipAddress = "127.0.0.1"
         serverInitService.init(ipAddress = ipAddress)
         service.init(ipAddress = ipAddress)
         verify(testEventListener, times(1)).handleClientConnect(anyOrNull())
@@ -47,7 +48,6 @@ class ClientInitTest {
 
     @Test
     fun init_thenDisconnect() {
-        val ipAddress = "127.0.0.1"
         serverInitService.init(ipAddress = ipAddress)
         service.init(ipAddress = ipAddress)
         verify(testEventListener, times(1)).handleClientConnect(anyOrNull())
@@ -61,8 +61,21 @@ class ClientInitTest {
     }
 
     @Test
+    fun init_thenServerCloses() {
+        serverInitService.init(ipAddress = ipAddress)
+        service.init(ipAddress = ipAddress)
+        verify(testEventListener, times(1)).handleClientConnect(anyOrNull())
+        verify(testEventListener, times(1)).handleServerConnect(anyOrNull())
+        verify(testEventListener, never()).handleClose(anyOrNull())
+        verify(testEventListener, never()).handleServerSessionLost(anyOrNull())
+
+        serverInitService.close()
+        verify(testEventListener, times(1)).handleClose(anyOrNull())
+        verify(testEventListener, times(1)).handleServerSessionLost(anyOrNull())
+    }
+
+    @Test
     fun init_serverNotStarted() {
-        val ipAddress = "127.0.0.1"
         service.init(ipAddress = ipAddress)
         verify(testEventListener, never()).handleClientConnect(anyOrNull())
         verify(testEventListener, times(1)).handleClose(anyOrNull())
