@@ -7,7 +7,6 @@ import eu.chargetime.ocpp.feature.profile.ClientCoreProfile
 import eu.chargetime.ocpp.model.Confirmation
 import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.core.*
-import org.ocpp.client.client.interfaces.IClientConfiguration
 import org.ocpp.client.client.interfaces.IClientInitService
 import org.ocpp.client.client.interfaces.IClientService
 import org.ocpp.client.event.client.ClientConnectedEvent
@@ -22,8 +21,7 @@ import java.util.concurrent.CountDownLatch
 
 @Service
 class ClientService @Autowired constructor(
-    private val applicationEventPublisher: ApplicationEventPublisher,
-    private val clientConfiguration: IClientConfiguration
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) : IClientService, IClientInitService {
 
     private val port = 8887
@@ -54,6 +52,10 @@ class ClientService @Autowired constructor(
                 }
             }
         )
+    }
+
+    override fun disconnect() {
+        client?.disconnect()
     }
 
     override fun send(request: Request): Confirmation {
@@ -92,7 +94,8 @@ class ClientService @Autowired constructor(
         ): GetConfigurationConfirmation {
             logger.info("Received client request | Get Configuration Request")
             val confirmation = GetConfigurationConfirmation()
-            confirmation.configurationKey = clientConfiguration.getConfiguration()
+            // TODO provide configuration
+            confirmation.configurationKey = emptyArray()
             confirmation.unknownKey = emptyArray()
             return confirmation
         }

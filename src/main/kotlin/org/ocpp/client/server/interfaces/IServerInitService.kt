@@ -11,4 +11,9 @@ interface IServerInitService {
      * @param ipAddress IP address of the local socket connection.
      */
     fun init(ipAddress: String)
+
+    /**
+     * Close connection if open
+     */
+    fun close()
 }

@@ -61,6 +61,10 @@ class ServerService @Autowired constructor(
         )
     }
 
+    override fun close() {
+        server?.close()
+    }
+
     override fun send(request: Request): Confirmation {
         logger.info("Sending server request")
         val sessionIndex = Ids.getRandomUUID()

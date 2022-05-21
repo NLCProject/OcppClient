@@ -11,4 +11,9 @@ interface IClientInitService {
      * @param ipAddress IP address of the server socket to connect with.
      */
     fun init(ipAddress: String)
+
+    /**
+     * Disconnect if connected to the server
+     */
+    fun disconnect()
 }

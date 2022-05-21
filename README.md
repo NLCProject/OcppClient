@@ -69,7 +69,6 @@ are supported:
 <ul>
     <li>Autowire the OcppClient interface.</li>
     <li>Call the 'startClient' method with the IP address of the server socket. The port is always <b>8887</b>.</li>
-    <li>Every client has to implement the <b>IClientConfiguration</b> interface to provide its configuration in case the server requests it.</li>
 </ul>
 
     ```
