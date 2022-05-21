@@ -11,7 +11,7 @@ interface IClientRequestService {
     /**
      * Authorize charge point at server.
      *
-     * @param idTag .
+     * @param idTag Max size is 20.
      * @return Async confirmation.
      */
     fun authorize(idTag: String): AuthorizeConfirmation
@@ -36,7 +36,7 @@ interface IClientRequestService {
      * Start transaction.
      *
      * @param connectorId .
-     * @param idTag .
+     * @param idTag Max size is 20.
      * @param meterStart .
      * @return Async confirmation.
      */
@@ -54,8 +54,8 @@ interface IClientRequestService {
     /**
      * Notify server about a (re)boot.
      *
-     * @param chargePointVendor .
-     * @param chargePointModel .
+     * @param chargePointVendor Max size is 20.
+     * @param chargePointModel Max size is 20.
      * @return Async confirmation.
      */
     fun bootNotification(chargePointVendor: String, chargePointModel: String): BootNotificationConfirmation

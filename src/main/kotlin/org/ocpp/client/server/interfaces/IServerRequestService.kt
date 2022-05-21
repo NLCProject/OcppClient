@@ -28,8 +28,8 @@ interface IServerRequestService {
     /**
      * Change single configuration.
      *
-     * @param key Configuration key to change.
-     * @param value New value to apply
+     * @param key Configuration key to change. Max length is 50.
+     * @param value New value to apply. Max length is 500.
      * @return Async confirmation.
      */
     fun changeConfiguration(key: String, value: String): ChangeConfigurationConfirmation
@@ -54,7 +54,7 @@ interface IServerRequestService {
      * Start transaction at charge point.
      *
      * @param connectorId .
-     * @param idTag .
+     * @param idTag Max length is 20.
      * @param profile Charging profile to apply
      * @return Async confirmation.
      */
