@@ -5,8 +5,8 @@ server mode and handles all outgoing and incoming requests.
 ## Installation
 ### Create Artifact
 <ul>
-    <li>In the toolbar, go to 'Build > Build Artifacts.. > Rebuild'</li>
-    <li>Thr JAR output can be found in the folder 'out > artifacts > OcppClient > *.jar'</li>
+    <li>In the toolbar, go to <b>Build > Build Artifacts.. > Rebuild</b></li>
+    <li>Thr JAR output can be found in the folder <b>out > artifacts > OcppClient > *.jar</b></li>
 </ul>
 
 ### Implement Library (Artifact) in other application
@@ -64,7 +64,6 @@ are supported:
     <li>Reset</li>
     <li>Unlock Connector</li>
 </ul>
-
 
 ### Register as client
 <ul>
