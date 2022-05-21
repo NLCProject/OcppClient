@@ -8,9 +8,10 @@ import eu.chargetime.ocpp.model.Confirmation
 import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.core.*
 import org.ocpp.client.client.interfaces.IClientConfiguration
+import org.ocpp.client.client.interfaces.IClientInitService
 import org.ocpp.client.client.interfaces.IClientService
 import org.ocpp.client.event.client.ClientConnectedEvent
-import org.ocpp.client.event.client.ClientLostEvent
+import org.ocpp.client.event.client.ClientConnectionLostEvent
 import org.ocpp.client.event.client.request.*
 import org.ocpp.client.utils.Ids
 import org.slf4j.LoggerFactory
@@ -23,7 +24,7 @@ import java.util.concurrent.CountDownLatch
 class ClientService @Autowired constructor(
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val clientConfiguration: IClientConfiguration
-) : IClientService {
+) : IClientService, IClientInitService {
 
     private val port = 8887
     private var client: JSONClient? = null
@@ -48,7 +49,7 @@ class ClientService @Autowired constructor(
                  *
                  */
                 override fun connectionClosed() {
-                    applicationEventPublisher.publishEvent(ClientLostEvent(source = this))
+                    applicationEventPublisher.publishEvent(ClientConnectionLostEvent(source = this))
                     logger.info("Client session lost connection")
                 }
             }

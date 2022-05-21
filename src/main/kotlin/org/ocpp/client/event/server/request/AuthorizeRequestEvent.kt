@@ -5,6 +5,10 @@ import org.springframework.context.ApplicationEvent
 import java.util.*
 
 /**
+ * Event is fired by an incoming authorize request.
  *
+ * @param sessionIndex .
+ * @param request .
+ * @param source Class where the event has been fired.
  */
 class AuthorizeRequestEvent(source: Any, sessionIndex: UUID, request: AuthorizeRequest) : ApplicationEvent(source)

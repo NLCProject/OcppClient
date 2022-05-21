@@ -5,7 +5,11 @@ import org.springframework.context.ApplicationEvent
 import java.util.*
 
 /**
+ * Event is fired by an incoming boot notification request.
  *
+ * @param sessionIndex .
+ * @param request .
+ * @param source Class where the event has been fired.
  */
 class BootNotificationRequestEvent(source: Any, sessionIndex: UUID, request: BootNotificationRequest) :
     ApplicationEvent(source)

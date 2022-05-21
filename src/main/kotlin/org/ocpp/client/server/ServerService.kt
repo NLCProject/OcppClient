@@ -8,10 +8,11 @@ import eu.chargetime.ocpp.model.Confirmation
 import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.SessionInformation
 import eu.chargetime.ocpp.model.core.*
-import org.ocpp.client.date.DateTimeUtil
+import org.ocpp.client.utils.DateTimeUtil
 import org.ocpp.client.event.server.ServerConnectedEvent
-import org.ocpp.client.event.server.ServerLostEvent
+import org.ocpp.client.event.server.ServerSessionLostEvent
 import org.ocpp.client.event.server.request.*
+import org.ocpp.client.server.interfaces.IServerInitService
 import org.ocpp.client.server.interfaces.IServerService
 import org.ocpp.client.utils.Ids
 import org.slf4j.LoggerFactory
@@ -24,7 +25,7 @@ import java.util.concurrent.CountDownLatch
 @Service
 class ServerService @Autowired constructor(
     private val applicationEventPublisher: ApplicationEventPublisher
-) : IServerService {
+) : IServerService, IServerInitService {
 
     private val port = 8887
     private val heartbeatInterval = 5
@@ -53,7 +54,7 @@ class ServerService @Autowired constructor(
                  *
                  */
                 override fun lostSession(sessionIndex: UUID) {
-                    applicationEventPublisher.publishEvent(ServerLostEvent(source = this))
+                    applicationEventPublisher.publishEvent(ServerSessionLostEvent(source = this))
                     logger.info("Server session '$sessionIndex' lost connection")
                 }
             }

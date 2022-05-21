@@ -5,6 +5,10 @@ import org.springframework.context.ApplicationEvent
 import java.util.*
 
 /**
+ * Event is fired by an incoming meter values request.
  *
+ * @param sessionIndex .
+ * @param request .
+ * @param source Class where the event has been fired.
  */
 class MeterValuesRequestEvent(source: Any, sessionIndex: UUID, request: MeterValuesRequest) : ApplicationEvent(source)

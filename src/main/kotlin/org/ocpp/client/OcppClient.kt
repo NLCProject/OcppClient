@@ -1,8 +1,8 @@
 package org.ocpp.client
 
 import org.ocpp.client.application.IOcppClient
-import org.ocpp.client.client.interfaces.IClientService
-import org.ocpp.client.server.interfaces.IServerService
+import org.ocpp.client.client.interfaces.IClientInitService
+import org.ocpp.client.server.interfaces.IServerInitService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -12,10 +12,10 @@ import java.lang.Exception
 class OcppClient : IOcppClient {
 
     @Autowired
-    private lateinit var client: IClientService
+    private lateinit var client: IClientInitService
 
     @Autowired
-    private lateinit var server: IServerService
+    private lateinit var server: IServerInitService
 
     private val logger = LoggerFactory.getLogger(this::class.java)
     private var started = false

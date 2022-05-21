@@ -3,7 +3,7 @@ package org.ocpp.client.client
 import eu.chargetime.ocpp.model.core.*
 import org.ocpp.client.client.interfaces.IClientRequestService
 import org.ocpp.client.client.interfaces.IClientService
-import org.ocpp.client.date.DateTimeUtil
+import org.ocpp.client.utils.DateTimeUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
