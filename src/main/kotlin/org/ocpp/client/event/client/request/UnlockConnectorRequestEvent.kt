@@ -9,4 +9,4 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class UnlockConnectorRequestEvent(source: Any, request: UnlockConnectorRequest) : ApplicationEvent(source)
+class UnlockConnectorRequestEvent(source: Any, val request: UnlockConnectorRequest) : ApplicationEvent(source)

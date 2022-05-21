@@ -9,5 +9,5 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class RemoteStartTransactionRequestEvent(source: Any, request: RemoteStartTransactionRequest) :
+class RemoteStartTransactionRequestEvent(source: Any, val request: RemoteStartTransactionRequest) :
     ApplicationEvent(source)

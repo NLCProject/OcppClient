@@ -11,5 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class BootNotificationRequestEvent(source: Any, sessionIndex: UUID, request: BootNotificationRequest) :
+class BootNotificationRequestEvent(source: Any, val sessionIndex: UUID, val request: BootNotificationRequest) :
     ApplicationEvent(source)

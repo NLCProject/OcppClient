@@ -11,5 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class StatusNotificationRequestEvent(source: Any, sessionIndex: UUID, request: StatusNotificationRequest) :
+class StatusNotificationRequestEvent(source: Any, val sessionIndex: UUID, val request: StatusNotificationRequest) :
     ApplicationEvent(source)

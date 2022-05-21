@@ -53,7 +53,7 @@ class ServerRequestService @Autowired constructor(
         profile: ChargingProfile
     ): RemoteStartTransactionConfirmation {
         logger.info("Sending server request | Remote Start Transaction")
-        val request = RemoteStartTransactionRequest(Ids.getRandomIdentifier().toString())
+        val request = RemoteStartTransactionRequest(Ids.getRandomId().toString())
         request.idTag = idTag
         request.connectorId = connectorId
         request.chargingProfile = profile

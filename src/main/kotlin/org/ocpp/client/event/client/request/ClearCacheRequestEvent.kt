@@ -9,4 +9,4 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class ClearCacheRequestEvent(source: Any, request: ClearCacheRequest) : ApplicationEvent(source)
+class ClearCacheRequestEvent(source: Any, val request: ClearCacheRequest) : ApplicationEvent(source)

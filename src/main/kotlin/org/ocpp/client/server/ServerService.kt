@@ -31,6 +31,11 @@ class ServerService @Autowired constructor(
     private val port = 8887
     private var server: JSONServer? = null
     private val logger = LoggerFactory.getLogger(this::class.java)
+    private var sessionIndex: UUID? = null
+
+    fun setSessionIndex(sessionIndex: UUID?) {
+        this.sessionIndex = sessionIndex
+    }
 
     override fun init(ipAddress: String) {
         logger.info("Starting server on IP address '$ipAddress' and port '$port'")
@@ -43,6 +48,7 @@ class ServerService @Autowired constructor(
                  *
                  */
                 override fun newSession(sessionIndex: UUID, information: SessionInformation) {
+                    setSessionIndex(sessionIndex = sessionIndex)
                     applicationEventPublisher.publishEvent(ServerConnectedEvent(source = this))
                     logger.info(
                         "New server session '$sessionIndex' | Identifier '${information.identifier}' " +
@@ -54,6 +60,7 @@ class ServerService @Autowired constructor(
                  *
                  */
                 override fun lostSession(sessionIndex: UUID) {
+                    setSessionIndex(sessionIndex = null)
                     applicationEventPublisher.publishEvent(ServerSessionLostEvent(source = this))
                     logger.info("Server session '$sessionIndex' lost connection")
                 }
@@ -67,7 +74,9 @@ class ServerService @Autowired constructor(
 
     override fun send(request: Request): Confirmation {
         logger.info("Sending server request")
-        val sessionIndex = Ids.getRandomUUID()
+        if (sessionIndex == null)
+            throw Exception("No session index found")
+
         val countDownLatch = CountDownLatch(1)
         var receivedConfirmation: Confirmation? = null
 
@@ -76,7 +85,7 @@ class ServerService @Autowired constructor(
             ?.whenComplete { confirmation, ex ->
                 logger.info("Server request sent | $confirmation")
 
-                if (ex.message != null)
+                if (ex?.message != null)
                     logger.info("Error while sending request: ${ex.message}")
 
                 receivedConfirmation = confirmation
@@ -120,7 +129,7 @@ class ServerService @Autowired constructor(
                 logger.info("Received server request | Start Transaction Request | Session Index '$sessionIndex'")
                 val event = StartTransactionRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
                 applicationEventPublisher.publishEvent(event)
-                return StartTransactionConfirmation(IdTagInfo(AuthorizationStatus.Accepted), Ids.getRandomIdentifier())
+                return StartTransactionConfirmation(IdTagInfo(AuthorizationStatus.Accepted), Ids.getRandomId())
             }
 
             override fun handleStopTransactionRequest(

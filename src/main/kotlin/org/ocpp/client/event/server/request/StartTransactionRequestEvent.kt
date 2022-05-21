@@ -11,5 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class StartTransactionRequestEvent(source: Any, sessionIndex: UUID, request: StartTransactionRequest) :
+class StartTransactionRequestEvent(source: Any, val sessionIndex: UUID, val request: StartTransactionRequest) :
     ApplicationEvent(source)

@@ -11,5 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class StopTransactionRequestEvent(source: Any, sessionIndex: UUID, request: StopTransactionRequest) :
+class StopTransactionRequestEvent(source: Any, val sessionIndex: UUID, val request: StopTransactionRequest) :
     ApplicationEvent(source)

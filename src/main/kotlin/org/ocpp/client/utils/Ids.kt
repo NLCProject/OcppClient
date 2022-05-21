@@ -9,11 +9,18 @@ import kotlin.random.Random
 object Ids {
 
     /**
-     * Returns a random UUID as string.
+     * Returns a random ID as string.
      *
-     * @return UUID as string
+     * @return Random ID as string
      */
-    fun getRandomId(): String = UUID.randomUUID().toString()
+    fun getRandomIdString(): String = getRandomId().toString()
+
+    /**
+     * Returns a random integer between 100_000 and 999_999.
+     *
+     * @return Random integer.
+     */
+    fun getRandomId(): Int = Random.nextInt(from = 100_000, until = 999_999)
 
     /**
      * Returns a random UUID.
@@ -21,11 +28,4 @@ object Ids {
      * @return UUID.
      */
     fun getRandomUUID(): UUID = UUID.randomUUID()
-
-    /**
-     * Returns a random integer between 100_000 and 999_999.
-     *
-     * @return Random integer.
-     */
-    fun getRandomIdentifier(): Int = Random.nextInt(from = 100_000, until = 999_999)
 }

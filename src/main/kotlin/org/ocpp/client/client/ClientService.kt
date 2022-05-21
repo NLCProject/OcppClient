@@ -30,7 +30,7 @@ class ClientService @Autowired constructor(
 
     override fun init(ipAddress: String) {
         logger.info("Starting client on port '$port'")
-        client = JSONClient(getCoreProfile(), Ids.getRandomId())
+        client = JSONClient(getCoreProfile(), Ids.getRandomIdString())
         client?.connect(
             "ws://$ipAddress:$port",
             object : ClientEvents {
@@ -68,7 +68,7 @@ class ClientService @Autowired constructor(
             ?.whenComplete { confirmation, ex ->
                 logger.info("Client request sent | $confirmation")
 
-                if (ex.message != null)
+                if (ex?.message != null)
                     logger.info("Error while sending client request: ${ex.message}")
 
                 receivedConfirmation = confirmation

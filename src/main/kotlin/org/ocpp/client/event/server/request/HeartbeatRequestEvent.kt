@@ -11,4 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class HeartbeatRequestEvent(source: Any, sessionIndex: UUID, request: HeartbeatRequest) : ApplicationEvent(source)
+class HeartbeatRequestEvent(source: Any, val sessionIndex: UUID, val request: HeartbeatRequest) :
+    ApplicationEvent(source)

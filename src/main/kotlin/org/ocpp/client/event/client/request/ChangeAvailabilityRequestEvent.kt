@@ -9,4 +9,4 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class ChangeAvailabilityRequestEvent(source: Any, request: ChangeAvailabilityRequest) : ApplicationEvent(source)
+class ChangeAvailabilityRequestEvent(source: Any, val request: ChangeAvailabilityRequest) : ApplicationEvent(source)

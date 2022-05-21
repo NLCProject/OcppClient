@@ -11,4 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class DataTransferRequestEvent(source: Any, sessionIndex: UUID, request: DataTransferRequest) : ApplicationEvent(source)
+class DataTransferRequestEvent(source: Any, val sessionIndex: UUID, val request: DataTransferRequest) :
+    ApplicationEvent(source)

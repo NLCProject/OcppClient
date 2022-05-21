@@ -9,4 +9,4 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class DataTransferRequestEvent(source: Any, request: DataTransferRequest) : ApplicationEvent(source)
+class DataTransferRequestEvent(source: Any, val request: DataTransferRequest) : ApplicationEvent(source)

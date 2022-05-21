@@ -11,4 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class MeterValuesRequestEvent(source: Any, sessionIndex: UUID, request: MeterValuesRequest) : ApplicationEvent(source)
+class MeterValuesRequestEvent(source: Any, val sessionIndex: UUID, val request: MeterValuesRequest) :
+    ApplicationEvent(source)

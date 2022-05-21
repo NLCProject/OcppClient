@@ -9,4 +9,4 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class ChangeConfigurationRequestEvent(source: Any, request: ChangeConfigurationRequest) : ApplicationEvent(source)
+class ChangeConfigurationRequestEvent(source: Any, val request: ChangeConfigurationRequest) : ApplicationEvent(source)

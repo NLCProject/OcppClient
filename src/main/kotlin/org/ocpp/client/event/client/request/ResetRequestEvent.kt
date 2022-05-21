@@ -9,4 +9,4 @@ import org.springframework.context.ApplicationEvent
  * @param request .
  * @param source Class where the event has been fired.
  */
-class ResetRequestEvent(source: Any, request: ResetRequest) : ApplicationEvent(source)
+class ResetRequestEvent(source: Any, val request: ResetRequest) : ApplicationEvent(source)

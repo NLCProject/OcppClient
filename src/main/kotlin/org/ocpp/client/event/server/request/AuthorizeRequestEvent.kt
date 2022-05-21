@@ -11,4 +11,5 @@ import java.util.*
  * @param request .
  * @param source Class where the event has been fired.
  */
-class AuthorizeRequestEvent(source: Any, sessionIndex: UUID, request: AuthorizeRequest) : ApplicationEvent(source)
+class AuthorizeRequestEvent(source: Any, val sessionIndex: UUID, val request: AuthorizeRequest) :
+    ApplicationEvent(source)
