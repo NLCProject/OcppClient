@@ -19,7 +19,7 @@ import kotlin.test.assertEquals
 class StatusNotificationRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -29,7 +29,7 @@ class StatusNotificationRequestTest : ClientRequestTest() {
         clientRequestService.statusNotification(connectorId = connectorId, errorCode = errorCode, status = status)
 
         val argumentCaptor = argumentCaptor<StatusNotificationRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)
         assertEquals(errorCode, argumentCaptor.firstValue.request.errorCode)
         assertEquals(status, argumentCaptor.firstValue.request.status)

@@ -18,7 +18,7 @@ import kotlin.test.assertEquals
 class ChangeAvailabilityRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -27,7 +27,7 @@ class ChangeAvailabilityRequestTest : ServerRequestTest() {
         serverRequestService.changeAvailability(connectorId = connectorId, type = type)
 
         val argumentCaptor = argumentCaptor<ChangeAvailabilityRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)
         assertEquals(type, argumentCaptor.firstValue.request.type)
     }

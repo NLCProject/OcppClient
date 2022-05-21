@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class ClearCacheRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -25,7 +25,7 @@ class ClearCacheRequestTest : ServerRequestTest() {
         assertEquals(ClearCacheStatus.Accepted, confirmation.status)
 
         val argumentCaptor = argumentCaptor<ClearCacheRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
     }
 
     @TestComponent

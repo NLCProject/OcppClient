@@ -69,6 +69,7 @@ class ServerService @Autowired constructor(
     }
 
     override fun close() {
+        logger.info("Closing server session")
         server?.close()
     }
 

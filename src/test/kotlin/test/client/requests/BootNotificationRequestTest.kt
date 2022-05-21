@@ -19,7 +19,7 @@ import kotlin.test.assertEquals
 class BootNotificationRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -34,7 +34,7 @@ class BootNotificationRequestTest : ClientRequestTest() {
         assertEquals(Heartbeat.heartbeatInterval, confirmation.interval)
 
         val argumentCaptor = argumentCaptor<BootNotificationRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(chargePointVendor, argumentCaptor.firstValue.request.chargePointVendor)
         assertEquals(chargePointModel, argumentCaptor.firstValue.request.chargePointModel)
     }

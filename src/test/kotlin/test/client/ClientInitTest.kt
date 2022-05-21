@@ -26,7 +26,7 @@ class ClientInitTest {
     private lateinit var service: IClientInitService
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     private val ipAddress = "127.0.0.1"
 
@@ -40,45 +40,45 @@ class ClientInitTest {
     fun init() {
         serverInitService.init(ipAddress = ipAddress)
         service.init(ipAddress = ipAddress)
-        verify(testEventListener, times(1)).handleClientConnect(anyOrNull())
-        verify(testEventListener, times(1)).handleServerConnect(anyOrNull())
-        verify(testEventListener, never()).handleClose(anyOrNull())
-        verify(testEventListener, never()).handleServerSessionLost(anyOrNull())
+        verify(eventListener, times(1)).handleClientConnect(anyOrNull())
+        verify(eventListener, times(1)).handleServerConnect(anyOrNull())
+        verify(eventListener, never()).handleClose(anyOrNull())
+        verify(eventListener, never()).handleServerSessionLost(anyOrNull())
     }
 
     @Test
     fun init_thenDisconnect() {
         serverInitService.init(ipAddress = ipAddress)
         service.init(ipAddress = ipAddress)
-        verify(testEventListener, times(1)).handleClientConnect(anyOrNull())
-        verify(testEventListener, times(1)).handleServerConnect(anyOrNull())
-        verify(testEventListener, never()).handleClose(anyOrNull())
-        verify(testEventListener, never()).handleServerSessionLost(anyOrNull())
+        verify(eventListener, times(1)).handleClientConnect(anyOrNull())
+        verify(eventListener, times(1)).handleServerConnect(anyOrNull())
+        verify(eventListener, never()).handleClose(anyOrNull())
+        verify(eventListener, never()).handleServerSessionLost(anyOrNull())
 
         service.disconnect()
-        verify(testEventListener, times(1)).handleClose(anyOrNull())
-        verify(testEventListener, times(1)).handleServerSessionLost(anyOrNull())
+        verify(eventListener, times(1)).handleClose(anyOrNull())
+        verify(eventListener, times(1)).handleServerSessionLost(anyOrNull())
     }
 
     @Test
     fun init_thenServerCloses() {
         serverInitService.init(ipAddress = ipAddress)
         service.init(ipAddress = ipAddress)
-        verify(testEventListener, times(1)).handleClientConnect(anyOrNull())
-        verify(testEventListener, times(1)).handleServerConnect(anyOrNull())
-        verify(testEventListener, never()).handleClose(anyOrNull())
-        verify(testEventListener, never()).handleServerSessionLost(anyOrNull())
+        verify(eventListener, times(1)).handleClientConnect(anyOrNull())
+        verify(eventListener, times(1)).handleServerConnect(anyOrNull())
+        verify(eventListener, never()).handleClose(anyOrNull())
+        verify(eventListener, never()).handleServerSessionLost(anyOrNull())
 
         serverInitService.close()
-        verify(testEventListener, times(1)).handleClose(anyOrNull())
-        verify(testEventListener, times(1)).handleServerSessionLost(anyOrNull())
+        verify(eventListener, times(1)).handleClose(anyOrNull())
+        verify(eventListener, times(1)).handleServerSessionLost(anyOrNull())
     }
 
     @Test
     fun init_serverNotStarted() {
         service.init(ipAddress = ipAddress)
-        verify(testEventListener, never()).handleClientConnect(anyOrNull())
-        verify(testEventListener, times(1)).handleClose(anyOrNull())
+        verify(eventListener, never()).handleClientConnect(anyOrNull())
+        verify(eventListener, times(1)).handleClose(anyOrNull())
     }
 
     @TestComponent

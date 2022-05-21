@@ -19,7 +19,7 @@ import kotlin.test.assertNull
 class RemoteStartTransactionRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -34,7 +34,7 @@ class RemoteStartTransactionRequestTest : ServerRequestTest() {
         assertEquals(RemoteStartStopStatus.Accepted, confirmation.status)
 
         val argumentCaptor = argumentCaptor<RemoteStartTransactionRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)
         assertEquals(idTag, argumentCaptor.firstValue.request.idTag)
         assertNull(argumentCaptor.firstValue.request.chargingProfile)

@@ -18,7 +18,7 @@ import kotlin.test.assertEquals
 class ChangeConfigurationRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -28,7 +28,7 @@ class ChangeConfigurationRequestTest : ServerRequestTest() {
         assertEquals(ConfigurationStatus.Accepted, confirmation.status)
 
         val argumentCaptor = argumentCaptor<ChangeConfigurationRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(key, argumentCaptor.firstValue.request.key)
         assertEquals(value, argumentCaptor.firstValue.request.value)
     }

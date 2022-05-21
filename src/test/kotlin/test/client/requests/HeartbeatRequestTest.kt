@@ -16,7 +16,7 @@ import kotlin.test.assertNotNull
 class HeartbeatRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -24,7 +24,7 @@ class HeartbeatRequestTest : ClientRequestTest() {
         assertNotNull(confirmation.currentTime)
 
         val argumentCaptor = argumentCaptor<HeartbeatRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
     }
 
     @TestComponent

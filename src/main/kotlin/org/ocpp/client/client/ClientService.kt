@@ -55,6 +55,7 @@ class ClientService @Autowired constructor(
     }
 
     override fun disconnect() {
+        logger.info("Disconnecting client")
         client?.disconnect()
     }
 
@@ -94,8 +95,8 @@ class ClientService @Autowired constructor(
         ): GetConfigurationConfirmation {
             logger.info("Received client request | Get Configuration Request")
             val confirmation = GetConfigurationConfirmation()
-            // TODO provide configuration
 
+            // TODO provide configuration
             val keyValueType = KeyValueType("TestKey", true)
             confirmation.configurationKey = arrayOf(keyValueType)
             confirmation.unknownKey = emptyArray()

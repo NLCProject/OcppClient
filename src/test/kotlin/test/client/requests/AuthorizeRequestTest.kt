@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class AuthorizeRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -25,7 +25,7 @@ class AuthorizeRequestTest : ClientRequestTest() {
         clientRequestService.authorize(idTag = idTag)
 
         val argumentCaptor = argumentCaptor<AuthorizeRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(idTag, argumentCaptor.firstValue.request.idTag)
     }
 

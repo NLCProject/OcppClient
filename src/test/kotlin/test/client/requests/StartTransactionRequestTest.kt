@@ -20,7 +20,7 @@ import kotlin.test.assertTrue
 class StartTransactionRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -37,7 +37,7 @@ class StartTransactionRequestTest : ClientRequestTest() {
         assertTrue(confirmation.transactionId in 100_000..999_999)
 
         val argumentCaptor = argumentCaptor<StartTransactionRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(idTag, argumentCaptor.firstValue.request.idTag)
         assertEquals(meterStart, argumentCaptor.firstValue.request.meterStart)
         assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)

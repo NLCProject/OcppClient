@@ -18,7 +18,7 @@ import kotlin.test.assertEquals
 class RemoteStopTransactionRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -27,7 +27,7 @@ class RemoteStopTransactionRequestTest : ServerRequestTest() {
         assertEquals(RemoteStartStopStatus.Accepted, confirmation.status)
 
         val argumentCaptor = argumentCaptor<RemoteStopTransactionRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(transactionId, argumentCaptor.firstValue.request.transactionId)
     }
 

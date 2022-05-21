@@ -19,7 +19,7 @@ import kotlin.test.assertNull
 class DataTransferRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -30,7 +30,7 @@ class DataTransferRequestTest : ClientRequestTest() {
         assertNull(confirmation.data)
 
         val argumentCaptor = argumentCaptor<ServerDataTransferRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(vendorId, argumentCaptor.firstValue.request.vendorId)
         assertEquals(data, argumentCaptor.firstValue.request.data)
     }

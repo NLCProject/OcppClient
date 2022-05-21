@@ -18,7 +18,7 @@ import kotlin.test.assertEquals
 class UnlockConnectorRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -27,7 +27,7 @@ class UnlockConnectorRequestTest : ServerRequestTest() {
         assertEquals(UnlockStatus.Unlocked, confirmation.status)
 
         val argumentCaptor = argumentCaptor<UnlockConnectorRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)
     }
 

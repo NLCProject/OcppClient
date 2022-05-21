@@ -18,7 +18,7 @@ import kotlin.test.assertEquals
 class ResetRequestTest : ServerRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -27,7 +27,7 @@ class ResetRequestTest : ServerRequestTest() {
         assertEquals(ResetStatus.Accepted, confirmation.status)
 
         val argumentCaptor = argumentCaptor<ResetRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(type, argumentCaptor.firstValue.request.type)
     }
 

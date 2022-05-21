@@ -21,7 +21,7 @@ import kotlin.test.assertNotNull
 class MeterValuesRequestTest : ClientRequestTest() {
 
     @SpyBean
-    private lateinit var testEventListener: EventTestListener
+    private lateinit var eventListener: EventTestListener
 
     @Test
     fun sendRequest() {
@@ -37,7 +37,7 @@ class MeterValuesRequestTest : ClientRequestTest() {
         )
 
         val argumentCaptor = argumentCaptor<MeterValuesRequestEvent>()
-        verify(testEventListener, times(1)).handle(argumentCaptor.capture())
+        verify(eventListener, times(1)).handle(argumentCaptor.capture())
         assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)
         assertEquals(transactionId, argumentCaptor.firstValue.request.transactionId)
         assertEquals(1, argumentCaptor.firstValue.request.meterValue.size)
