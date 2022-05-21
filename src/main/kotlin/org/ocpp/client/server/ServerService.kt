@@ -14,6 +14,7 @@ import org.ocpp.client.event.server.ServerSessionLostEvent
 import org.ocpp.client.event.server.request.*
 import org.ocpp.client.server.interfaces.IServerInitService
 import org.ocpp.client.server.interfaces.IServerService
+import org.ocpp.client.utils.Heartbeat
 import org.ocpp.client.utils.Ids
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,7 +29,6 @@ class ServerService @Autowired constructor(
 ) : IServerService, IServerInitService {
 
     private val port = 8887
-    private val heartbeatInterval = 5
     private var server: JSONServer? = null
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -138,7 +138,7 @@ class ServerService @Autowired constructor(
                 applicationEventPublisher.publishEvent(event)
                 return BootNotificationConfirmation(
                     DateTimeUtil.dateNow(),
-                    heartbeatInterval,
+                    Heartbeat.heartbeatInterval,
                     RegistrationStatus.Accepted
                 )
             }
