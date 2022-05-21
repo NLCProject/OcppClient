@@ -9,10 +9,10 @@ server mode and handles all outgoing and incoming requests.
     <li>Thr JAR output can be found in the folder 'out > artifacts > OcppClient > *.jar'</li>
 </ul>
 
-### Implement Library (Artifact)
+### Implement Library (Artifact) in other application
 <ul>
-    <li>Create the folder <b>libs</b> in your root folder and copy the JAR file into it.</li>
-    <li>Open the build.gradle file in the application where you want to use this library.</li>
+    <li>Create the folder <b>libs</b> in your root folder and copy the JAR file into it. Do this in the application where you want to use this library.</li>
+    <li>Open the build.gradle file.</li>
     <li>Add the following dependency:</li>
 
             ```
@@ -51,7 +51,20 @@ server mode and handles all outgoing and incoming requests.
 
 ### Send request as server
 Autowire the file <b>IServerRequestService</b>. In this files, all available requests can be found. Every request runs
-async and waits for the response from the client. Each request returns the confirmation from the client.
+async and waits for the response from the client. Each request returns the confirmation from the client. The following requests
+are supported:
+<ul>
+    <li>Change Availability</li>
+    <li>Get Configuration</li>
+    <li>Change Configuration</li>
+    <li>Clear Cache</li>
+    <li>Data Transfer</li>
+    <li>Remote Start Transaction</li>
+    <li>Remote Stop Transaction</li>
+    <li>Reset</li>
+    <li>Unlock Connector</li>
+</ul>
+
 
 ### Register as client
 <ul>
@@ -71,7 +84,18 @@ async and waits for the response from the client. Each request returns the confi
 
 ### Send request as client
 Autowire the file <b>IClientRequestService</b>. In this files, all available requests can be found. Every request runs
-async and waits for the response from the server. Each request returns the confirmation from the server.
+async and waits for the response from the server. Each request returns the confirmation from the server. The following requests
+are supported:
+<ul>
+    <li>Authorize</li>
+    <li>Data Transfer</li>
+    <li>Heartbeat</li>
+    <li>Start Transaction</li>
+    <li>Stop Transaction</li>
+    <li>Boot Notification</li>
+    <li>Meter Values</li>
+    <li>Status Notification</li>
+</ul>
 
 ## Credits
 <ul>
