@@ -31,5 +31,4 @@ abstract class ClientRequestTest {
         serverInitService.close()
         clientInitService.disconnect()
     }
-
 }

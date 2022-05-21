@@ -110,7 +110,12 @@ class ServerService @Autowired constructor(
                 request: DataTransferRequest
             ): DataTransferConfirmation {
                 logger.info("Received server request | Data Transfer Request | Session Index '$sessionIndex'")
-                val event = DataTransferRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+                val event = ServerDataTransferRequestEvent(
+                    sessionIndex = sessionIndex,
+                    request = request,
+                    source = this
+                )
+
                 applicationEventPublisher.publishEvent(event)
                 return DataTransferConfirmation(DataTransferStatus.Accepted)
             }

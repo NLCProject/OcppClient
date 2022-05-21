@@ -1,12 +1,12 @@
 package test.server.requests
 
-import eu.chargetime.ocpp.model.core.AvailabilityType
+import eu.chargetime.ocpp.model.core.ConfigurationStatus
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.ocpp.client.Application
-import org.ocpp.client.event.client.request.ChangeAvailabilityRequestEvent
+import org.ocpp.client.event.client.request.ChangeConfigurationRequestEvent
 import org.ocpp.client.utils.Ids
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestComponent
@@ -15,26 +15,27 @@ import org.springframework.context.event.EventListener
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [Application::class])
-class ChangeAvailabilityRequestTest : ServerRequestTest() {
+class ChangeConfigurationRequestTest : ServerRequestTest() {
 
     @SpyBean
     private lateinit var testEventListener: EventTestListener
 
     @Test
     fun sendRequest() {
-        val connectorId = Ids.getRandomId()
-        val type = AvailabilityType.values().random()
-        serverRequestService.changeAvailability(connectorId = connectorId, type = type)
+        val key = Ids.getRandomIdString()
+        val value = Ids.getRandomIdString()
+        val confirmation = serverRequestService.changeConfiguration(key = key, value = value)
+        assertEquals(ConfigurationStatus.Accepted, confirmation.status)
 
-        val argumentCaptor = argumentCaptor<ChangeAvailabilityRequestEvent>()
+        val argumentCaptor = argumentCaptor<ChangeConfigurationRequestEvent>()
         verify(testEventListener, times(1)).handle(argumentCaptor.capture())
-        assertEquals(connectorId, argumentCaptor.firstValue.request.connectorId)
-        assertEquals(type, argumentCaptor.firstValue.request.type)
+        assertEquals(key, argumentCaptor.firstValue.request.key)
+        assertEquals(value, argumentCaptor.firstValue.request.value)
     }
 
     @TestComponent
     class EventTestListener {
         @EventListener
-        fun handle(event: ChangeAvailabilityRequestEvent) { }
+        fun handle(event: ChangeConfigurationRequestEvent) { }
     }
 }

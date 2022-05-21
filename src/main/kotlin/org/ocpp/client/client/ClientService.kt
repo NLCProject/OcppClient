@@ -95,7 +95,9 @@ class ClientService @Autowired constructor(
             logger.info("Received client request | Get Configuration Request")
             val confirmation = GetConfigurationConfirmation()
             // TODO provide configuration
-            confirmation.configurationKey = emptyArray()
+
+            val keyValueType = KeyValueType("TestKey", true)
+            confirmation.configurationKey = arrayOf(keyValueType)
             confirmation.unknownKey = emptyArray()
             return confirmation
         }
@@ -118,7 +120,7 @@ class ClientService @Autowired constructor(
 
         override fun handleDataTransferRequest(request: DataTransferRequest): DataTransferConfirmation {
             logger.info("Received client request | Data Transfer Request")
-            val event = DataTransferRequestEvent(request = request, source = this)
+            val event = ClientDataTransferRequestEvent(request = request, source = this)
             applicationEventPublisher.publishEvent(event)
             return DataTransferConfirmation(DataTransferStatus.Accepted)
         }

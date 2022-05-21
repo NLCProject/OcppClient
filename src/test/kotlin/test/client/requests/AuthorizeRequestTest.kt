@@ -14,13 +14,13 @@ import org.springframework.context.event.EventListener
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [Application::class])
-class AuthorizeRequestTest: ClientRequestTest() {
+class AuthorizeRequestTest : ClientRequestTest() {
 
     @SpyBean
     private lateinit var testEventListener: EventTestListener
 
     @Test
-    fun init() {
+    fun sendRequest() {
         val idTag = Ids.getRandomIdString()
         clientRequestService.authorize(idTag = idTag)
 
