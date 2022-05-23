@@ -3,7 +3,7 @@ package test.client
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
-import org.ocpp.client.Application
+import org.ocpp.client.TestApplication
 import org.ocpp.client.client.interfaces.IClientInitService
 import org.ocpp.client.event.client.ClientConnectedEvent
 import org.ocpp.client.event.client.ClientConnectionLostEvent
@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.TestComponent
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.context.event.EventListener
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [Application::class])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [TestApplication::class])
 class ClientInitTest {
 
     @Autowired

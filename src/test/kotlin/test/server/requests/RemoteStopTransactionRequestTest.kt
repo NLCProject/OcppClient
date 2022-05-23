@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.ocpp.client.Application
+import org.ocpp.client.TestApplication
 import org.ocpp.client.event.client.request.RemoteStopTransactionRequestEvent
 import org.ocpp.client.utils.Ids
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.context.event.EventListener
 import kotlin.test.assertEquals
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [Application::class])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [TestApplication::class])
 class RemoteStopTransactionRequestTest : ServerRequestTest() {
 
     @SpyBean

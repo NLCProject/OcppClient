@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 
 /**
- * This application is only for testing purposes.
+ * This application is only for testing purposes. It is used as entry point for starting the project as Spring
+ * application.
  */
 @SpringBootApplication(
     exclude = [
@@ -16,8 +17,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
         HibernateJpaAutoConfiguration::class
     ]
 )
-class Application
+class TestApplication
 
 fun main(args: Array<String>) {
-    SpringApplication.run(Application::class.java, *args)
+    SpringApplication.run(TestApplication::class.java, *args)
 }

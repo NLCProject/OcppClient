@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.ocpp.client.Application
+import org.ocpp.client.TestApplication
 import org.ocpp.client.event.server.request.MeterValuesRequestEvent
 import org.ocpp.client.utils.DateTimeUtil
 import org.ocpp.client.utils.Ids
@@ -17,7 +17,7 @@ import org.springframework.context.event.EventListener
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [Application::class])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [TestApplication::class])
 class MeterValuesRequestTest : ClientRequestTest() {
 
     @SpyBean
