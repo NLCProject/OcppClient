@@ -7,8 +7,8 @@ import org.ocpp.client.TestApplication
 import org.ocpp.client.client.interfaces.IClientInitService
 import org.ocpp.client.event.client.ClientConnectedEvent
 import org.ocpp.client.event.client.ClientConnectionLostEvent
-import org.ocpp.client.event.server.ServerConnectedEvent
-import org.ocpp.client.event.server.ServerSessionLostEvent
+import org.ocpp.client.event.server.ClientConnectedEvent
+import org.ocpp.client.event.server.ClientSessionLostEvent
 import org.ocpp.client.server.interfaces.IServerInitService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -90,9 +90,9 @@ class ClientInitTest {
         fun handleClientConnect(event: ClientConnectedEvent) { }
 
         @EventListener
-        fun handleServerConnect(event: ServerConnectedEvent) { }
+        fun handleServerConnect(event: org.ocpp.client.event.server.ClientConnectedEvent) { }
 
         @EventListener
-        fun handleServerSessionLost(event: ServerSessionLostEvent) { }
+        fun handleServerSessionLost(event: ClientSessionLostEvent) { }
     }
 }

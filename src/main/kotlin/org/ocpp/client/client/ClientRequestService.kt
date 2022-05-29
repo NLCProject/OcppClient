@@ -23,6 +23,7 @@ class ClientRequestService @Autowired constructor(
 
     override fun dataTransfer(vendorId: String, data: String): DataTransferConfirmation {
         logger.info("Sending client request | Data Transfer")
+        // Currently, not handled by server
         val request = DataTransferRequest(vendorId)
         request.data = data
         return service.send(request) as DataTransferConfirmation
@@ -48,6 +49,7 @@ class ClientRequestService @Autowired constructor(
 
     override fun bootNotification(chargePointVendor: String, chargePointModel: String): BootNotificationConfirmation {
         logger.info("Sending client request | Boot Notification")
+        // Currently, not handled by server
         val request = BootNotificationRequest(chargePointVendor, chargePointModel)
         return service.send(request) as BootNotificationConfirmation
     }

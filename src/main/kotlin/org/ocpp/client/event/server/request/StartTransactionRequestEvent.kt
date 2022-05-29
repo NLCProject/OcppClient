@@ -7,9 +7,14 @@ import java.util.*
 /**
  * Event is fired by an incoming start transaction heartbeat request.
  *
- * @param sessionIndex .
- * @param request .
  * @param source Class where the event has been fired.
+ * @param sessionIndex .
+ * @param transactionId .
+ * @param request .
  */
-class StartTransactionRequestEvent(source: Any, val sessionIndex: UUID, val request: StartTransactionRequest) :
-    ApplicationEvent(source)
+class StartTransactionRequestEvent(
+    source: Any,
+    val sessionIndex: UUID,
+    val transactionId: Int,
+    val request: StartTransactionRequest
+) : ApplicationEvent(source)

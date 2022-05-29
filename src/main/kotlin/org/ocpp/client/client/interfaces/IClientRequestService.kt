@@ -11,7 +11,7 @@ interface IClientRequestService {
     /**
      * Authorize charge point at server.
      *
-     * @param idTag Max size is 20.
+     * @param idTag Max size is 20. Authorization ID is free to choose.
      * @return Async confirmation.
      */
     fun authorize(idTag: String): AuthorizeConfirmation
@@ -19,7 +19,7 @@ interface IClientRequestService {
     /**
      * Sending data to the server.
      *
-     * @param vendorId .
+     * @param vendorId This identifies the Vendor specific implementation.
      * @param data Custom data as string.
      * @return Async confirmation.
      */
@@ -37,7 +37,7 @@ interface IClientRequestService {
      *
      * @param connectorId .
      * @param idTag Max size is 20.
-     * @param meterStart .
+     * @param meterStart This contains the meter value in Wh for the connector at start of the transaction.
      * @return Async confirmation.
      */
     fun startTransaction(connectorId: Int, idTag: String, meterStart: Int): StartTransactionConfirmation
@@ -45,7 +45,7 @@ interface IClientRequestService {
     /**
      * Stop transaction.
      *
-     * @param meterStop .
+     * @param meterStop This contains the meter value in Wh for the connector at end of the transaction.
      * @param transactionId .
      * @return Async confirmation.
      */
@@ -54,14 +54,14 @@ interface IClientRequestService {
     /**
      * Notify server about a (re)boot.
      *
-     * @param chargePointVendor Max size is 20.
-     * @param chargePointModel Max size is 20.
+     * @param chargePointVendor This contains a value that identifies the vendor of the ChargePoint.
+     * @param chargePointModel Max size is 20. This contains a value that identifies the model of the ChargePoint.
      * @return Async confirmation.
      */
     fun bootNotification(chargePointVendor: String, chargePointModel: String): BootNotificationConfirmation
 
     /**
-     * Sends sample values for diagnostic.
+     * Sends charging meter values during an ongoing transactions. The current charging value is sent in Wh.
      *
      * @param connectorId .
      * @param meterValue Array of meter values.

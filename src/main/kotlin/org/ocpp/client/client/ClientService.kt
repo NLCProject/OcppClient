@@ -60,7 +60,7 @@ class ClientService @Autowired constructor(
     }
 
     override fun send(request: Request): Confirmation {
-        logger.info("Sending client request")
+        logger.info("Sending client -> server request")
         val countDownLatch = CountDownLatch(1)
         var receivedConfirmation: Confirmation? = null
 

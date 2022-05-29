@@ -8,8 +8,8 @@ import eu.chargetime.ocpp.model.Confirmation
 import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.SessionInformation
 import eu.chargetime.ocpp.model.core.*
-import org.ocpp.client.event.server.ServerConnectedEvent
-import org.ocpp.client.event.server.ServerSessionLostEvent
+import org.ocpp.client.event.server.ClientConnectedEvent
+import org.ocpp.client.event.server.ClientSessionLostEvent
 import org.ocpp.client.event.server.request.*
 import org.ocpp.client.server.interfaces.IServerInitService
 import org.ocpp.client.server.interfaces.IServerService
@@ -48,33 +48,41 @@ class ServerService @Autowired constructor(
                  *
                  */
                 override fun newSession(sessionIndex: UUID, information: SessionInformation) {
-                    setSessionIndex(sessionIndex = sessionIndex)
-                    applicationEventPublisher.publishEvent(ServerConnectedEvent(source = this))
                     logger.info(
-                        "New server session '$sessionIndex' | Identifier '${information.identifier}' " +
+                        "New client session '$sessionIndex' | Identifier '${information.identifier}' " +
                             "| IP address '${information.address.hostName}'"
                     )
+
+                    setSessionIndex(sessionIndex = sessionIndex)
+                    val event = ClientConnectedEvent(
+                        source = this,
+                        sessionIndex = sessionIndex,
+                        information = information
+                    )
+
+                    applicationEventPublisher.publishEvent(event)
                 }
 
                 /**
                  *
                  */
                 override fun lostSession(sessionIndex: UUID) {
+                    logger.info("Client session '$sessionIndex' lost connection")
                     setSessionIndex(sessionIndex = null)
-                    applicationEventPublisher.publishEvent(ServerSessionLostEvent(source = this))
-                    logger.info("Server session '$sessionIndex' lost connection")
+                    val event = ClientSessionLostEvent(source = this, sessionIndex = sessionIndex)
+                    applicationEventPublisher.publishEvent(event)
                 }
             }
         )
     }
 
     override fun close() {
-        logger.info("Closing server session")
+        logger.info("Shutting down server")
         server?.close()
     }
 
     override fun send(request: Request): Confirmation {
-        logger.info("Sending server request")
+        logger.info("Sending server -> client request")
         if (sessionIndex == null)
             throw Exception("No session index found")
 
@@ -99,6 +107,7 @@ class ServerService @Autowired constructor(
 
     private fun getCoreProfile(): ServerCoreProfile =
         ServerCoreProfile(object : ServerCoreEventHandler {
+
             override fun handleAuthorizeRequest(sessionIndex: UUID, request: AuthorizeRequest): AuthorizeConfirmation {
                 logger.info("Received server request | Authorization Request | Session Index '$sessionIndex'")
                 val event = AuthorizeRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
@@ -133,9 +142,16 @@ class ServerService @Autowired constructor(
                 request: StartTransactionRequest
             ): StartTransactionConfirmation {
                 logger.info("Received server request | Start Transaction Request | Session Index '$sessionIndex'")
-                val event = StartTransactionRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+                val transactionId = Ids.getRandomId()
+                val event = StartTransactionRequestEvent(
+                    transactionId = transactionId,
+                    sessionIndex = sessionIndex,
+                    request = request,
+                    source = this
+                )
+
                 applicationEventPublisher.publishEvent(event)
-                return StartTransactionConfirmation(IdTagInfo(AuthorizationStatus.Accepted), Ids.getRandomId())
+                return StartTransactionConfirmation(IdTagInfo(AuthorizationStatus.Accepted), transactionId)
             }
 
             override fun handleStopTransactionRequest(
