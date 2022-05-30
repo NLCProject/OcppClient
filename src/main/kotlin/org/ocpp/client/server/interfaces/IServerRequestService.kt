@@ -61,7 +61,7 @@ interface IServerRequestService {
     fun remoteStartTransaction(
         connectorId: Int,
         idTag: String,
-        profile: ChargingProfile?
+        profile: ChargingProfile
     ): RemoteStartTransactionConfirmation
 
     /**

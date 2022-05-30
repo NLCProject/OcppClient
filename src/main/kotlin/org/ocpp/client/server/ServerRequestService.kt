@@ -22,6 +22,7 @@ class ServerRequestService @Autowired constructor(
     }
 
     override fun getConfiguration(keys: Array<String>): GetConfigurationConfirmation {
+        // Currently, not handled by server
         logger.info("Sending server request | Get Configuration")
         val request = GetConfigurationRequest()
         request.key = keys
@@ -29,6 +30,7 @@ class ServerRequestService @Autowired constructor(
     }
 
     override fun changeConfiguration(key: String, value: String): ChangeConfigurationConfirmation {
+        // Currently, not handled by server
         logger.info("Sending server request | Change Configuration")
         val request = ChangeConfigurationRequest(key, value)
         return service.send(request = request) as ChangeConfigurationConfirmation
@@ -41,6 +43,7 @@ class ServerRequestService @Autowired constructor(
     }
 
     override fun dataTransfer(vendorId: String, data: String): DataTransferConfirmation {
+        // Currently, not handled by server
         logger.info("Sending server request | Data Transfer")
         val request = DataTransferRequest(vendorId)
         request.data = data
@@ -50,7 +53,7 @@ class ServerRequestService @Autowired constructor(
     override fun remoteStartTransaction(
         connectorId: Int,
         idTag: String,
-        profile: ChargingProfile?
+        profile: ChargingProfile
     ): RemoteStartTransactionConfirmation {
         logger.info("Sending server request | Remote Start Transaction")
         val request = RemoteStartTransactionRequest(Ids.getRandomId().toString())
