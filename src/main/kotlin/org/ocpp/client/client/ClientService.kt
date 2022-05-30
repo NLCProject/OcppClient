@@ -81,6 +81,7 @@ class ClientService @Autowired constructor(
     }
 
     private fun getCoreProfile(): ClientCoreProfile = ClientCoreProfile(object : ClientCoreEventHandler {
+
         override fun handleChangeAvailabilityRequest(
             request: ChangeAvailabilityRequest
         ): ChangeAvailabilityConfirmation {

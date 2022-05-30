@@ -11,7 +11,7 @@ import java.util.*
  * @param sessionIndex .
  * @param information .
  */
-class ClientConnectedEvent(
+class ClientConnectedOnServerEvent(
     var sessionIndex: UUID,
     var information: SessionInformation,
     source: Any

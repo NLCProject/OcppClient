@@ -8,7 +8,7 @@ import eu.chargetime.ocpp.model.Confirmation
 import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.SessionInformation
 import eu.chargetime.ocpp.model.core.*
-import org.ocpp.client.event.server.ClientConnectedEvent
+import org.ocpp.client.event.server.ClientConnectedOnServerEvent
 import org.ocpp.client.event.server.ClientSessionLostEvent
 import org.ocpp.client.event.server.request.*
 import org.ocpp.client.server.interfaces.IServerInitService
@@ -54,7 +54,7 @@ class ServerService @Autowired constructor(
                     )
 
                     setSessionIndex(sessionIndex = sessionIndex)
-                    val event = ClientConnectedEvent(
+                    val event = ClientConnectedOnServerEvent(
                         source = this,
                         sessionIndex = sessionIndex,
                         information = information
