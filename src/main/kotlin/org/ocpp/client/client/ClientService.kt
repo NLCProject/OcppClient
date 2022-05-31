@@ -39,16 +39,16 @@ class ClientService @Autowired constructor(
                  *
                  */
                 override fun connectionOpened() {
-                    applicationEventPublisher.publishEvent(ClientConnectedEvent(source = this))
                     logger.info("New client session")
+                    applicationEventPublisher.publishEvent(ClientConnectedEvent(source = this))
                 }
 
                 /**
                  *
                  */
                 override fun connectionClosed() {
-                    applicationEventPublisher.publishEvent(ClientConnectionLostEvent(source = this))
                     logger.info("Client session lost connection")
+                    applicationEventPublisher.publishEvent(ClientConnectionLostEvent(source = this))
                 }
             }
         )

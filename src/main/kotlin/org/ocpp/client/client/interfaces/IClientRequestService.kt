@@ -38,18 +38,31 @@ interface IClientRequestService {
      * @param connectorId .
      * @param idTag Max size is 20.
      * @param meterStart This contains the meter value in Wh for the connector at start of the transaction.
+     * @param reservationId .
      * @return Async confirmation.
      */
-    fun startTransaction(connectorId: Int, idTag: String, meterStart: Int): StartTransactionConfirmation
+    fun startTransaction(
+        connectorId: Int,
+        idTag: String,
+        meterStart: Int,
+        reservationId: Int = 0
+    ): StartTransactionConfirmation
 
     /**
      * Stop transaction.
      *
      * @param meterStop This contains the meter value in Wh for the connector at end of the transaction.
-     * @param transactionId .
+     * @param transactionData Array of meter values.
+     * @param transactionId Transaction to stop.
+     * @param reason Reason to stop.
      * @return Async confirmation.
      */
-    fun stopTransaction(meterStop: Int, transactionId: Int): StopTransactionConfirmation
+    fun stopTransaction(
+        meterStop: Int,
+        transactionData: Array<MeterValue> = emptyArray(),
+        transactionId: Int,
+        reason: Reason = Reason.Local
+    ): StopTransactionConfirmation
 
     /**
      * Notify server about a (re)boot.
@@ -76,11 +89,17 @@ interface IClientRequestService {
      * @param connectorId .
      * @param errorCode .
      * @param status .
+     * @param information Additional information.
+     * @param vendorId .
+     * @param vendorErrorCode .
      * @return Async confirmation.
      */
     fun statusNotification(
         connectorId: Int,
         errorCode: ChargePointErrorCode,
-        status: ChargePointStatus
+        status: ChargePointStatus,
+        information: String = String(),
+        vendorId: String = String(),
+        vendorErrorCode: String = String(),
     ): StatusNotificationConfirmation
 }

@@ -1,6 +1,7 @@
 package org.ocpp.client.client
 
 import eu.chargetime.ocpp.model.core.*
+import org.ocpp.client.application.Organisation
 import org.ocpp.client.client.interfaces.IClientRequestService
 import org.ocpp.client.client.interfaces.IClientService
 import org.ocpp.client.utils.DateTimeUtil
@@ -35,15 +36,29 @@ class ClientRequestService @Autowired constructor(
         return service.send(request) as HeartbeatConfirmation
     }
 
-    override fun startTransaction(connectorId: Int, idTag: String, meterStart: Int): StartTransactionConfirmation {
+    override fun startTransaction(
+        connectorId: Int,
+        idTag: String,
+        meterStart: Int,
+        reservationId: Int
+    ): StartTransactionConfirmation {
         logger.info("Sending client request | Start Transaction")
         val request = StartTransactionRequest(connectorId, idTag, meterStart, DateTimeUtil.dateNow())
+        request.reservationId = reservationId
         return service.send(request) as StartTransactionConfirmation
     }
 
-    override fun stopTransaction(meterStop: Int, transactionId: Int): StopTransactionConfirmation {
+    override fun stopTransaction(
+        meterStop: Int,
+        transactionData: Array<MeterValue>,
+        transactionId: Int,
+        reason: Reason
+    ): StopTransactionConfirmation {
         logger.info("Sending client request | Stop Transaction")
         val request = StopTransactionRequest(meterStop, DateTimeUtil.dateNow(), transactionId)
+        request.idTag = Organisation.validationId
+        request.reason = reason
+        request.transactionData = transactionData
         return service.send(request) as StopTransactionConfirmation
     }
 
@@ -69,10 +84,17 @@ class ClientRequestService @Autowired constructor(
     override fun statusNotification(
         connectorId: Int,
         errorCode: ChargePointErrorCode,
-        status: ChargePointStatus
+        status: ChargePointStatus,
+        information: String,
+        vendorId: String,
+        vendorErrorCode: String,
     ): StatusNotificationConfirmation {
         logger.info("Sending client request | Status Notification")
         val request = StatusNotificationRequest(connectorId, errorCode, status)
+        request.info = information
+        request.vendorId = vendorId
+        request.vendorErrorCode = vendorErrorCode
+        request.timestamp = DateTimeUtil.dateNow()
         return service.send(request) as StatusNotificationConfirmation
     }
 }

@@ -112,7 +112,7 @@ class ServerService @Autowired constructor(
                 logger.info("Received server request | Authorization Request | Session Index '$sessionIndex'")
                 val event = AuthorizeRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
                 applicationEventPublisher.publishEvent(event)
-                return AuthorizeConfirmation(IdTagInfo(AuthorizationStatus.Accepted))
+                return AuthorizeConfirmation(createIdTagInfo())
             }
 
             override fun handleDataTransferRequest(
@@ -151,7 +151,7 @@ class ServerService @Autowired constructor(
                 )
 
                 applicationEventPublisher.publishEvent(event)
-                return StartTransactionConfirmation(IdTagInfo(AuthorizationStatus.Accepted), transactionId)
+                return StartTransactionConfirmation(createIdTagInfo(), transactionId)
             }
 
             override fun handleStopTransactionRequest(
@@ -161,7 +161,9 @@ class ServerService @Autowired constructor(
                 logger.info("Received server request | Stop Transaction Request | Session Index '$sessionIndex'")
                 val event = StopTransactionRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
                 applicationEventPublisher.publishEvent(event)
-                return StopTransactionConfirmation()
+                val confirmation = StopTransactionConfirmation()
+                confirmation.idTagInfo = createIdTagInfo()
+                return confirmation
             }
 
             override fun handleBootNotificationRequest(
@@ -203,4 +205,11 @@ class ServerService @Autowired constructor(
                 return StatusNotificationConfirmation()
             }
         })
+
+    private fun createIdTagInfo(): IdTagInfo {
+        val idTagInfo = IdTagInfo(AuthorizationStatus.Accepted)
+        idTagInfo.expiryDate = DateTimeUtil.dateNow().plusWeeks(1)
+        idTagInfo.parentIdTag = String()
+        return idTagInfo
+    }
 }
