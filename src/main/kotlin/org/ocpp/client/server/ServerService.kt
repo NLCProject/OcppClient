@@ -38,10 +38,11 @@ class ServerService @Autowired constructor(
     }
 
     override fun init(ipAddress: String) {
-        logger.info("Starting server on IP address '$ipAddress' and port '$port'")
+        logger.info("Starting server on IP address '$ipAddress:$port'")
         server = JSONServer(getCoreProfile())
         server?.open(
-            ipAddress, port,
+            ipAddress,
+            port,
             object : ServerEvents {
 
                 /**

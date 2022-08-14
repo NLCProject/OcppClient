@@ -29,7 +29,7 @@ class ClientService @Autowired constructor(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun init(ipAddress: String) {
-        logger.info("Starting client on port '$port'")
+        logger.info("Starting client on IP address '$ipAddress:$port'")
         client = JSONClient(getCoreProfile(), Ids.getRandomIdString())
         client?.connect(
             "ws://$ipAddress:$port",
