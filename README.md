@@ -1,6 +1,13 @@
 # OCPP Client
-This library is used by the charge point and backend for communication. This client can be used either in client or
+
+## About this library
+This library is used by the charge point and backend for bi-directional communication. This library can be used either in client or
 server mode and handles all outgoing and incoming requests.
+
+The core functionality provides a bi-directional communication between one server and multiple clients. The 
+communication is based on a simple event architecture. Every request (regardless if server or client) is communicated
+via an event and can be handled by the registered application. How to install and use this libray is described in detail
+in the upcoming topics.
 
 ## Installation
 ### Create Artifact
@@ -65,6 +72,21 @@ are supported:
     <li>Unlock Connector</li>
 </ul>
 
+### Handle client requests as server
+In order to handle incoming requests of a connected client, the server must listen for the respective event which is
+fired by requesting the functionality. For every client functionality (as listed below), the respective event is
+available. To handle it, just announce an event listener like this
+
+    ```
+        /**
+         * Authorize smart home.
+         *
+         * @param event .
+         */
+        @EventListener(AuthorizeRequestEvent::class)
+        fun authorize(event: AuthorizeRequestEvent)
+    ```
+
 ### Register as client
 <ul>
     <li>Autowire the OcppClient interface.</li>
@@ -95,6 +117,21 @@ are supported:
     <li>Status Notification</li>
 </ul>
 
+### Handle server requests as client
+In order to handle incoming requests of a connected server, the client must listen for the respective event which is
+fired by requesting the functionality. For every server functionality (as listed above), the respective event is
+available. To handle it, just announce an event listener like this
+
+    ```
+        /**
+         * Changes availability of a connector.
+         *
+         * @param event .
+         */
+        @EventListener(ChangeAvailabilityRequestEvent::class)
+        fun changeAvailability(event: ChangeAvailabilityRequestEvent)
+    ```
+
 ## Credits
 <ul>
     <li>Markus Graf</li>
@@ -103,14 +140,25 @@ are supported:
 </ul>
 
 ## License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The ISC jar library which is used in this project was written by Markus Graf.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Literature
 <ul>
+    <li>https://github.com/NLCProject/OcppServer</li>
+    <li>https://github.com/NLCProject/BatteryController</li>
     <li>https://github.com/ChargeTimeEU/Java-OCA-OCPP/wiki</li>
     <li>https://github.com/ChargeTimeEU/Java-OCA-OCPP/wiki/Getting-started</li>
     <li>https://github.com/ChargeTimeEU/Java-OCA-OCPP/wiki/Setting-up-v1.6-OCPP-J-server</li>
