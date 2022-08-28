@@ -84,9 +84,7 @@ class ServerService @Autowired constructor(
 
     override fun send(request: Request): Confirmation {
         logger.info("Sending server -> client request")
-        if (sessionIndex == null)
-            throw Exception("No session index found")
-
+        sessionIndex ?: throw Exception("No session index found")
         val countDownLatch = CountDownLatch(1)
         var receivedConfirmation: Confirmation? = null
 
