@@ -8,6 +8,7 @@ import eu.chargetime.ocpp.model.Confirmation
 import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.SessionInformation
 import eu.chargetime.ocpp.model.core.*
+import org.ocpp.client.configuration.Configuration
 import org.ocpp.client.event.server.ClientConnectedOnServerEvent
 import org.ocpp.client.event.server.ClientSessionLostEvent
 import org.ocpp.client.event.server.request.*
@@ -28,21 +29,15 @@ class ServerService @Autowired constructor(
     private val applicationEventPublisher: ApplicationEventPublisher
 ) : IServerService, IServerInitService {
 
-    private val port = 8887
     private var server: JSONServer? = null
     private val logger = LoggerFactory.getLogger(this::class.java)
-    private var sessionIndex: UUID? = null
-
-    fun setSessionIndex(sessionIndex: UUID?) {
-        this.sessionIndex = sessionIndex
-    }
 
     override fun init(ipAddress: String) {
-        logger.info("Starting server on IP address '$ipAddress:$port'")
+        logger.info("Starting server on IP address '$ipAddress:${Configuration.port}'")
         server = JSONServer(getCoreProfile())
         server?.open(
             ipAddress,
-            port,
+            Configuration.port,
             object : ServerEvents {
 
                 /**
@@ -54,7 +49,6 @@ class ServerService @Autowired constructor(
                             "| IP address '${information.address.hostName}'"
                     )
 
-                    setSessionIndex(sessionIndex = sessionIndex)
                     val event = ClientConnectedOnServerEvent(
                         source = this,
                         sessionIndex = sessionIndex,
@@ -69,7 +63,6 @@ class ServerService @Autowired constructor(
                  */
                 override fun lostSession(sessionIndex: UUID) {
                     logger.info("Client session '$sessionIndex' lost connection")
-                    setSessionIndex(sessionIndex = null)
                     val event = ClientSessionLostEvent(source = this, sessionIndex = sessionIndex)
                     applicationEventPublisher.publishEvent(event)
                 }
@@ -82,26 +75,26 @@ class ServerService @Autowired constructor(
         server?.close()
     }
 
-    override fun send(request: Request): Confirmation {
-        logger.info("Sending server -> client request")
-        sessionIndex ?: throw Exception("No session index found")
+    override fun send(request: Request, sessionIndex: String): Confirmation {
+        logger.info("Sending server -> client request | session index '$sessionIndex'")
         val countDownLatch = CountDownLatch(1)
         var receivedConfirmation: Confirmation? = null
 
         server
-            ?.send(sessionIndex, request)
+            ?.send(UUID.fromString(sessionIndex), request)
             ?.whenComplete { confirmation, ex ->
-                logger.info("Server request sent | $confirmation")
+                logger.info("Server request sent | $confirmation | session index '$sessionIndex'")
 
                 if (ex?.message != null)
-                    logger.info("Error while sending request: ${ex.message}")
+                    logger.info("Error while sending request | session index '$sessionIndex' | ${ex.message}")
 
                 receivedConfirmation = confirmation
                 countDownLatch.countDown()
             }
 
         countDownLatch.await()
-        return receivedConfirmation ?: throw Exception("No confirmation received from client")
+        return receivedConfirmation ?: throw Exception("No confirmation received from client | " +
+            "session index '$sessionIndex'")
     }
 
     private fun getCoreProfile(): ServerCoreProfile =

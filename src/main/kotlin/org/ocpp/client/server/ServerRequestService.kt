@@ -15,69 +15,78 @@ class ServerRequestService @Autowired constructor(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun changeAvailability(connectorId: Int, type: AvailabilityType): ChangeAvailabilityConfirmation {
-        logger.info("Sending server request | Change Availability")
+    override fun changeAvailability(
+        connectorId: Int,
+        type: AvailabilityType,
+        sessionIndex: String
+    ): ChangeAvailabilityConfirmation {
+        logger.info("Sending server request | Change Availability | session index '$sessionIndex'")
         val request = ChangeAvailabilityRequest(connectorId, type)
-        return service.send(request = request) as ChangeAvailabilityConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as ChangeAvailabilityConfirmation
     }
 
-    override fun getConfiguration(keys: Array<String>): GetConfigurationConfirmation {
+    override fun getConfiguration(keys: Array<String>, sessionIndex: String): GetConfigurationConfirmation {
         // Currently, not handled by server
-        logger.info("Sending server request | Get Configuration")
+        logger.info("Sending server request | Get Configuration | session index '$sessionIndex'")
         val request = GetConfigurationRequest()
         request.key = keys
-        return service.send(request = request) as GetConfigurationConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as GetConfigurationConfirmation
     }
 
-    override fun changeConfiguration(key: String, value: String): ChangeConfigurationConfirmation {
+    override fun changeConfiguration(
+        key: String,
+        value: String,
+        sessionIndex: String
+    ): ChangeConfigurationConfirmation {
         // Currently, not handled by server
-        logger.info("Sending server request | Change Configuration")
+        logger.info("Sending server request | Change Configuration | session index '$sessionIndex'")
         val request = ChangeConfigurationRequest(key, value)
-        return service.send(request = request) as ChangeConfigurationConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as ChangeConfigurationConfirmation
     }
 
-    override fun clearCache(): ClearCacheConfirmation {
-        logger.info("Sending server request | Clear Cache")
+    override fun clearCache(sessionIndex: String): ClearCacheConfirmation {
+        logger.info("Sending server request | Clear Cache | session index '$sessionIndex'")
         val request = ClearCacheRequest()
-        return service.send(request = request) as ClearCacheConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as ClearCacheConfirmation
     }
 
-    override fun dataTransfer(vendorId: String, data: String): DataTransferConfirmation {
+    override fun dataTransfer(vendorId: String, data: String, sessionIndex: String): DataTransferConfirmation {
         // Currently, not handled by server
-        logger.info("Sending server request | Data Transfer")
+        logger.info("Sending server request | Data Transfer | session index '$sessionIndex'")
         val request = DataTransferRequest(vendorId)
         request.data = data
-        return service.send(request = request) as DataTransferConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as DataTransferConfirmation
     }
 
     override fun remoteStartTransaction(
         connectorId: Int,
         idTag: String,
-        profile: ChargingProfile?
+        profile: ChargingProfile?,
+        sessionIndex: String
     ): RemoteStartTransactionConfirmation {
-        logger.info("Sending server request | Remote Start Transaction")
+        logger.info("Sending server request | Remote Start Transaction | session index '$sessionIndex'")
         val request = RemoteStartTransactionRequest(Ids.getRandomId().toString())
         request.idTag = idTag
         request.connectorId = connectorId
         request.chargingProfile = profile
-        return service.send(request = request) as RemoteStartTransactionConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as RemoteStartTransactionConfirmation
     }
 
-    override fun remoteStopTransaction(transactionId: Int): RemoteStopTransactionConfirmation {
-        logger.info("Sending server request | Remote Stop Transaction")
+    override fun remoteStopTransaction(transactionId: Int, sessionIndex: String): RemoteStopTransactionConfirmation {
+        logger.info("Sending server request | Remote Stop Transaction | session index '$sessionIndex'")
         val request = RemoteStopTransactionRequest(transactionId)
-        return service.send(request = request) as RemoteStopTransactionConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as RemoteStopTransactionConfirmation
     }
 
-    override fun reset(type: ResetType): ResetConfirmation {
+    override fun reset(type: ResetType, sessionIndex: String): ResetConfirmation {
         logger.info("Sending server request | Reset")
         val request = ResetRequest(type)
-        return service.send(request = request) as ResetConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as ResetConfirmation
     }
 
-    override fun unlockConnector(connectorId: Int): UnlockConnectorConfirmation {
-        logger.info("Sending server request | Unlock Connector")
+    override fun unlockConnector(connectorId: Int, sessionIndex: String): UnlockConnectorConfirmation {
+        logger.info("Sending server request | Unlock Connector | session index '$sessionIndex'")
         val request = UnlockConnectorRequest(connectorId)
-        return service.send(request = request) as UnlockConnectorConfirmation
+        return service.send(request = request, sessionIndex = sessionIndex) as UnlockConnectorConfirmation
     }
 }

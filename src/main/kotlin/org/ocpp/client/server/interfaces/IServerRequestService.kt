@@ -15,7 +15,11 @@ interface IServerRequestService {
      * @param type .
      * @return Async confirmation.
      */
-    fun changeAvailability(connectorId: Int, type: AvailabilityType): ChangeAvailabilityConfirmation
+    fun changeAvailability(
+        connectorId: Int,
+        type: AvailabilityType,
+        sessionIndex: String
+    ): ChangeAvailabilityConfirmation
 
     /**
      * Request configuration from charge point.
@@ -23,7 +27,7 @@ interface IServerRequestService {
      * @param keys Keys of configuration to request
      * @return Async confirmation.
      */
-    fun getConfiguration(keys: Array<String>): GetConfigurationConfirmation
+    fun getConfiguration(keys: Array<String>, sessionIndex: String): GetConfigurationConfirmation
 
     /**
      * Change single configuration.
@@ -32,14 +36,14 @@ interface IServerRequestService {
      * @param value New value to apply. Max length is 500.
      * @return Async confirmation.
      */
-    fun changeConfiguration(key: String, value: String): ChangeConfigurationConfirmation
+    fun changeConfiguration(key: String, value: String, sessionIndex: String): ChangeConfigurationConfirmation
 
     /**
      * Clear cache.
      *
      * @return Async confirmation.
      */
-    fun clearCache(): ClearCacheConfirmation
+    fun clearCache(sessionIndex: String): ClearCacheConfirmation
 
     /**
      * Send data to client.
@@ -48,7 +52,7 @@ interface IServerRequestService {
      * @param data Custom data as string
      * @return Async confirmation.
      */
-    fun dataTransfer(vendorId: String, data: String): DataTransferConfirmation
+    fun dataTransfer(vendorId: String, data: String, sessionIndex: String): DataTransferConfirmation
 
     /**
      * Start transaction at charge point.
@@ -61,7 +65,8 @@ interface IServerRequestService {
     fun remoteStartTransaction(
         connectorId: Int,
         idTag: String,
-        profile: ChargingProfile?
+        profile: ChargingProfile?,
+        sessionIndex: String
     ): RemoteStartTransactionConfirmation
 
     /**
@@ -70,7 +75,7 @@ interface IServerRequestService {
      * @param transactionId .
      * @return Async confirmation.
      */
-    fun remoteStopTransaction(transactionId: Int): RemoteStopTransactionConfirmation
+    fun remoteStopTransaction(transactionId: Int, sessionIndex: String): RemoteStopTransactionConfirmation
 
     /**
      * Reset charge point.
@@ -78,7 +83,7 @@ interface IServerRequestService {
      * @param type .
      * @return Async confirmation.
      */
-    fun reset(type: ResetType): ResetConfirmation
+    fun reset(type: ResetType, sessionIndex: String): ResetConfirmation
 
     /**
      * Unlock connector of charge point.
@@ -86,5 +91,5 @@ interface IServerRequestService {
      * @param connectorId .
      * @return Async confirmation.
      */
-    fun unlockConnector(connectorId: Int): UnlockConnectorConfirmation
+    fun unlockConnector(connectorId: Int, sessionIndex: String): UnlockConnectorConfirmation
 }

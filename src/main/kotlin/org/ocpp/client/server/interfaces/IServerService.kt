@@ -13,7 +13,8 @@ interface IServerService {
      * Send a request to the client. This method wait until a response is received.
      *
      * @param request Request to send.
+     * @param sessionIndex Session index of receiver client.
      * @return Async confirmation.
      */
-    fun send(request: Request): Confirmation
+    fun send(request: Request, sessionIndex: String): Confirmation
 }

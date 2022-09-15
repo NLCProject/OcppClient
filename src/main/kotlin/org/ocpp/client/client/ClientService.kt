@@ -9,6 +9,7 @@ import eu.chargetime.ocpp.model.Request
 import eu.chargetime.ocpp.model.core.*
 import org.ocpp.client.client.interfaces.IClientInitService
 import org.ocpp.client.client.interfaces.IClientService
+import org.ocpp.client.configuration.Configuration
 import org.ocpp.client.event.client.ClientConnectedEvent
 import org.ocpp.client.event.client.ClientConnectionLostEvent
 import org.ocpp.client.event.client.request.*
@@ -24,15 +25,14 @@ class ClientService @Autowired constructor(
     private val applicationEventPublisher: ApplicationEventPublisher
 ) : IClientService, IClientInitService {
 
-    private val port = 8887
     private var client: JSONClient? = null
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun init(ipAddress: String) {
-        logger.info("Starting client on IP address '$ipAddress:$port'")
+        logger.info("Starting client on IP address '$ipAddress:${Configuration.port}'")
         client = JSONClient(getCoreProfile(), Ids.getRandomIdString())
         client?.connect(
-            "ws://$ipAddress:$port",
+            "ws://$ipAddress:${Configuration.port}",
             object : ClientEvents {
 
                 /**
