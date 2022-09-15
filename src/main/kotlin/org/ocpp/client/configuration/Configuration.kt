@@ -8,5 +8,5 @@ object Configuration {
     /**
      *
      */
-    const val port = 8888
+    const val port = 8887
 }

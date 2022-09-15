@@ -32,8 +32,16 @@ class ServerService @Autowired constructor(
     private var server: JSONServer? = null
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun init(ipAddress: String) {
-        logger.info("Starting server on IP address '$ipAddress:${Configuration.port}'")
+    companion object {
+        var testMode = false
+        var initialSessionIndex: UUID? = null
+    }
+
+    override fun init(ipAddress: String, testMode: Boolean) {
+        logger.info("Starting server on IP address '$ipAddress:${Configuration.port}' | Test mode '$testMode'")
+        if (testMode)
+            ServerService.testMode = true
+
         server = JSONServer(getCoreProfile())
         server?.open(
             ipAddress,
@@ -55,6 +63,7 @@ class ServerService @Autowired constructor(
                         information = information
                     )
 
+                    initialSessionIndex = sessionIndex
                     applicationEventPublisher.publishEvent(event)
                 }
 
@@ -76,12 +85,13 @@ class ServerService @Autowired constructor(
     }
 
     override fun send(request: Request, sessionIndex: String): Confirmation {
-        logger.info("Sending server -> client request | session index '$sessionIndex'")
+        logger.info("Sending server -> client request | session index '$sessionIndex' | Test mode '$testMode'")
         val countDownLatch = CountDownLatch(1)
         var receivedConfirmation: Confirmation? = null
+        val validSessionIndex = if (testMode) initialSessionIndex else UUID.fromString(sessionIndex)
 
         server
-            ?.send(UUID.fromString(sessionIndex), request)
+            ?.send(validSessionIndex, request)
             ?.whenComplete { confirmation, ex ->
                 logger.info("Server request sent | $confirmation | session index '$sessionIndex'")
 
@@ -97,106 +107,105 @@ class ServerService @Autowired constructor(
             "session index '$sessionIndex'")
     }
 
-    private fun getCoreProfile(): ServerCoreProfile =
-        ServerCoreProfile(object : ServerCoreEventHandler {
+    private fun getCoreProfile(): ServerCoreProfile = ServerCoreProfile(object : ServerCoreEventHandler {
 
-            override fun handleAuthorizeRequest(sessionIndex: UUID, request: AuthorizeRequest): AuthorizeConfirmation {
-                logger.info("Received server request | Authorization Request | Session Index '$sessionIndex'")
-                val event = AuthorizeRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
-                applicationEventPublisher.publishEvent(event)
-                return AuthorizeConfirmation(createIdTagInfo())
-            }
+        override fun handleAuthorizeRequest(sessionIndex: UUID, request: AuthorizeRequest): AuthorizeConfirmation {
+            logger.info("Received server request | Authorization Request | Session Index '$sessionIndex'")
+            val event = AuthorizeRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+            applicationEventPublisher.publishEvent(event)
+            return AuthorizeConfirmation(createIdTagInfo())
+        }
 
-            override fun handleDataTransferRequest(
-                sessionIndex: UUID,
-                request: DataTransferRequest
-            ): DataTransferConfirmation {
-                logger.info("Received server request | Data Transfer Request | Session Index '$sessionIndex'")
-                val event = ServerDataTransferRequestEvent(
-                    sessionIndex = sessionIndex,
-                    request = request,
-                    source = this
-                )
+        override fun handleDataTransferRequest(
+            sessionIndex: UUID,
+            request: DataTransferRequest
+        ): DataTransferConfirmation {
+            logger.info("Received server request | Data Transfer Request | Session Index '$sessionIndex'")
+            val event = ServerDataTransferRequestEvent(
+                sessionIndex = sessionIndex,
+                request = request,
+                source = this
+            )
 
-                applicationEventPublisher.publishEvent(event)
-                return DataTransferConfirmation(DataTransferStatus.Accepted)
-            }
+            applicationEventPublisher.publishEvent(event)
+            return DataTransferConfirmation(DataTransferStatus.Accepted)
+        }
 
-            override fun handleHeartbeatRequest(sessionIndex: UUID, request: HeartbeatRequest): HeartbeatConfirmation {
-                logger.info("Received server request | Heartbeat Request | Session Index '$sessionIndex'")
-                val event = HeartbeatRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
-                applicationEventPublisher.publishEvent(event)
-                return HeartbeatConfirmation(DateTimeUtil.dateNow())
-            }
+        override fun handleHeartbeatRequest(sessionIndex: UUID, request: HeartbeatRequest): HeartbeatConfirmation {
+            logger.info("Received server request | Heartbeat Request | Session Index '$sessionIndex'")
+            val event = HeartbeatRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+            applicationEventPublisher.publishEvent(event)
+            return HeartbeatConfirmation(DateTimeUtil.dateNow())
+        }
 
-            override fun handleStartTransactionRequest(
-                sessionIndex: UUID,
-                request: StartTransactionRequest
-            ): StartTransactionConfirmation {
-                logger.info("Received server request | Start Transaction Request | Session Index '$sessionIndex'")
-                val transactionId = Ids.getRandomId()
-                val event = StartTransactionRequestEvent(
-                    transactionId = transactionId,
-                    sessionIndex = sessionIndex,
-                    request = request,
-                    source = this
-                )
+        override fun handleStartTransactionRequest(
+            sessionIndex: UUID,
+            request: StartTransactionRequest
+        ): StartTransactionConfirmation {
+            logger.info("Received server request | Start Transaction Request | Session Index '$sessionIndex'")
+            val transactionId = Ids.getRandomId()
+            val event = StartTransactionRequestEvent(
+                transactionId = transactionId,
+                sessionIndex = sessionIndex,
+                request = request,
+                source = this
+            )
 
-                applicationEventPublisher.publishEvent(event)
-                return StartTransactionConfirmation(createIdTagInfo(), transactionId)
-            }
+            applicationEventPublisher.publishEvent(event)
+            return StartTransactionConfirmation(createIdTagInfo(), transactionId)
+        }
 
-            override fun handleStopTransactionRequest(
-                sessionIndex: UUID,
-                request: StopTransactionRequest
-            ): StopTransactionConfirmation {
-                logger.info("Received server request | Stop Transaction Request | Session Index '$sessionIndex'")
-                val event = StopTransactionRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
-                applicationEventPublisher.publishEvent(event)
-                val confirmation = StopTransactionConfirmation()
-                confirmation.idTagInfo = createIdTagInfo()
-                return confirmation
-            }
+        override fun handleStopTransactionRequest(
+            sessionIndex: UUID,
+            request: StopTransactionRequest
+        ): StopTransactionConfirmation {
+            logger.info("Received server request | Stop Transaction Request | Session Index '$sessionIndex'")
+            val event = StopTransactionRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+            applicationEventPublisher.publishEvent(event)
+            val confirmation = StopTransactionConfirmation()
+            confirmation.idTagInfo = createIdTagInfo()
+            return confirmation
+        }
 
-            override fun handleBootNotificationRequest(
-                sessionIndex: UUID,
-                request: BootNotificationRequest
-            ): BootNotificationConfirmation {
-                logger.info("Received server request | Boot Notification Request | Session Index '$sessionIndex'")
-                val event = BootNotificationRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
-                applicationEventPublisher.publishEvent(event)
-                return BootNotificationConfirmation(
-                    DateTimeUtil.dateNow(),
-                    Heartbeat.heartbeatInterval,
-                    RegistrationStatus.Accepted
-                )
-            }
+        override fun handleBootNotificationRequest(
+            sessionIndex: UUID,
+            request: BootNotificationRequest
+        ): BootNotificationConfirmation {
+            logger.info("Received server request | Boot Notification Request | Session Index '$sessionIndex'")
+            val event = BootNotificationRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+            applicationEventPublisher.publishEvent(event)
+            return BootNotificationConfirmation(
+                DateTimeUtil.dateNow(),
+                Heartbeat.heartbeatInterval,
+                RegistrationStatus.Accepted
+            )
+        }
 
-            override fun handleMeterValuesRequest(
-                sessionIndex: UUID,
-                request: MeterValuesRequest
-            ): MeterValuesConfirmation {
-                logger.info("Received server request | Meter Values Request | Session Index '$sessionIndex'")
-                val event = MeterValuesRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
-                applicationEventPublisher.publishEvent(event)
-                return MeterValuesConfirmation()
-            }
+        override fun handleMeterValuesRequest(
+            sessionIndex: UUID,
+            request: MeterValuesRequest
+        ): MeterValuesConfirmation {
+            logger.info("Received server request | Meter Values Request | Session Index '$sessionIndex'")
+            val event = MeterValuesRequestEvent(sessionIndex = sessionIndex, request = request, source = this)
+            applicationEventPublisher.publishEvent(event)
+            return MeterValuesConfirmation()
+        }
 
-            override fun handleStatusNotificationRequest(
-                sessionIndex: UUID,
-                request: StatusNotificationRequest
-            ): StatusNotificationConfirmation {
-                logger.info("Received server request | Status Notification Request | Session Index '$sessionIndex'")
-                val event = StatusNotificationRequestEvent(
-                    sessionIndex = sessionIndex,
-                    request = request,
-                    source = this
-                )
+        override fun handleStatusNotificationRequest(
+            sessionIndex: UUID,
+            request: StatusNotificationRequest
+        ): StatusNotificationConfirmation {
+            logger.info("Received server request | Status Notification Request | Session Index '$sessionIndex'")
+            val event = StatusNotificationRequestEvent(
+                sessionIndex = sessionIndex,
+                request = request,
+                source = this
+            )
 
-                applicationEventPublisher.publishEvent(event)
-                return StatusNotificationConfirmation()
-            }
-        })
+            applicationEventPublisher.publishEvent(event)
+            return StatusNotificationConfirmation()
+        }
+    })
 
     private fun createIdTagInfo(): IdTagInfo {
         val idTagInfo = IdTagInfo(AuthorizationStatus.Accepted)
