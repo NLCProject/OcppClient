@@ -49,7 +49,10 @@ class ServerService @Autowired constructor(
             object : ServerEvents {
 
                 /**
+                 * Called when new session is created.
                  *
+                 * @param sessionIndex Unique session index. Valid only for this session.
+                 * @param information Additional session information.
                  */
                 override fun newSession(sessionIndex: UUID, information: SessionInformation) {
                     logger.info(
@@ -68,7 +71,9 @@ class ServerService @Autowired constructor(
                 }
 
                 /**
+                 * Called when existing session is lost.
                  *
+                 * @param sessionIndex Index of closed session.
                  */
                 override fun lostSession(sessionIndex: UUID) {
                     logger.info("Client session '$sessionIndex' lost connection")

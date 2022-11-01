@@ -36,7 +36,7 @@ class ClientService @Autowired constructor(
             object : ClientEvents {
 
                 /**
-                 *
+                 * Called when new client connection is opened
                  */
                 override fun connectionOpened() {
                     logger.info("New client session")
@@ -44,7 +44,7 @@ class ClientService @Autowired constructor(
                 }
 
                 /**
-                 *
+                 * Called when existing client connection is closed
                  */
                 override fun connectionClosed() {
                     logger.info("Client session lost connection")
