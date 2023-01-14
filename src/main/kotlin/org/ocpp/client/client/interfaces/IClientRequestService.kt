@@ -26,7 +26,7 @@ interface IClientRequestService {
     fun dataTransfer(vendorId: String, data: String): DataTransferConfirmation
 
     /**
-     * Keep-alive heartbeat. Must be send in a specific interval. Generally, the heartbeat interval is received by the
+     * Keep-alive heartbeat. Must be sent in a specific interval. Generally, the heartbeat interval is received by the
      * server via the BootNotificationRequest from the server.
      * @return Async confirmation.
      */
